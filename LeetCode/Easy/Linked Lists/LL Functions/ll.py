@@ -49,7 +49,7 @@ class linked_list:
       print("Index Out of range")
     cur = self.head.next
     cur_idx = 0
-    while cur.next != None:
+    while True:
       print("hiii")
       last_node = cur
       cur = cur.next
