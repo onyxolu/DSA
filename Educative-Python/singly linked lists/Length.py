@@ -31,6 +31,11 @@ class LinkedList:
       cur_node = cur_node.next
     print(length)
 
+  def len_recursive(self, node):
+    if node is None:
+      return 0
+    return 1 + self.len_recursive(node.next)
+
   def prepend(self, data):
     new_node = Node(data)
     new_node.next = self.head
