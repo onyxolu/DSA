@@ -31,6 +31,14 @@ class LinkedList:
       cur_node = cur_node.next
     print(length)
 
+  def len_rec(self):
+    print(self.length_rec(self.head))
+
+  def length_rec(self, node):
+    if node is None:
+      return 0
+    return 1 + self.length_rec(node.next)
+
   def prepend(self, data):
     new_node = Node(data)
     new_node.next = self.head
@@ -42,9 +50,10 @@ list1.append(5)
 list1.append(4)
 list1.append(3)
 list1.append(2)
-# list1.append(1)
+list1.append(1)
 # list1.delete_node(2)
 # list1.delete_node(0)
 # list1.delete_node(5)
 # print(list1.print_list())
 list1.length()
+list1.len_rec()
