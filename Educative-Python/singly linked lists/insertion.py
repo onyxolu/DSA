@@ -23,6 +23,15 @@ class LinkedList:
       print(cur_node.data) 
       cur_node = cur_node.next
 
+  def node_len(self):
+    cur_node = self.head
+    node_length = 0
+    while cur_node:
+      node_length += 1
+      cur_node = cur_node.next
+    print(node_length)
+
+
   def prepend(self, data):
     new_node = Node(data)
     new_node.next = self.head
@@ -43,6 +52,7 @@ list1.append(4)
 list1.append(3)
 list1.append(2)
 list1.append(1)
+list1.node_len()
 list1.prepend(6)
 list1.insert_after_node(list1.head.next.next, 5)
 print(list1.print_list())
