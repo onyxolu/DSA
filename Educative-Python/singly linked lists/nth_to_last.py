@@ -30,12 +30,10 @@ class LinkedList:
       length+=1
       cur_node = cur_node.next
     print(length)
-
-  def len_rec(self):
-    print(self.length_rec(self.head))
+    return length
 
   def print_nth_from_last(self, n):
-    total_len = self.len_iterative()
+    total_len = self.length()
   
     cur = self.head 
     while cur:
@@ -45,4 +43,4 @@ class LinkedList:
         total_len -= 1
         cur = cur.next
     if cur is None:
-    return  
+        return  
