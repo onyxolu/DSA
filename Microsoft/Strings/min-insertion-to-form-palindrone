@@ -1,0 +1,16 @@
+def minInsertions(self, s: str) -> int:
+    memo = {}
+    def dfs(l, r):
+        if l >= r: return 0
+        if (l,r) in memo: return memo[(l,r)]
+        if s[l] == s[r]:
+            insertions = dfs(l+1, r-1)
+            memo[(l,r)] = insertions
+            return memo[(l,r)]
+        insertions = min(dfs(l+1, r), dfs(l, r-1))
+        memo[(l,r)] = 1+insertions
+        return 1 + insertions
+    
+    return dfs(0, len(s)-1)
+
+
