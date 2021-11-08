@@ -30,3 +30,17 @@ class collatz:
 collatz1 = collatz()
 print(collatz1.compute(5))
 
+
+
+def collatz(num, memo={1: 0}):
+    if num in memo:
+         return memo[num]
+
+    if num % 2:
+        res =  1 + collatz(3*num, memo)
+    else:
+        res = 1 + collatz(num//2, memo)
+
+    memo[num] = res
+    return res
+
