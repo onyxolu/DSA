@@ -23,11 +23,11 @@ def is_palindrome(self):
     return True
 
 
-# def is_palindrome(self):
-#   # Solution 1:
-#   s = ""
-#   p = self.head 
-#   while p:
-#     s += p.data
-#     p = p.next
-#   return s == s[::-1]
+def is_palindrome(self):
+  # Solution 1:
+  s = ""
+  p = self.head 
+  while p:
+    s += p.data
+    p = p.next
+  return s == s[::-1]
