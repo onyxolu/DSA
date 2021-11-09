@@ -11,7 +11,7 @@ class TreeNode:
         self.right = right
 
 
-    def dfs_nolevel(self, root):
+    def bfs_nolevel(self, root):
         result = []
         queue = deque()
         queue.append(root)
