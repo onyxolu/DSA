@@ -53,11 +53,106 @@
 //       obj[arr[i]] = 1;
 //     }
 //   }
+// // }
+
+// // // 0(logN) = Divide and conquer / two pointer
+
+// // // Space Complexity
+
+// // str = "adewale"
+
+// def CountIndexes(self, A, B):
+        
+// if (sum(A) != sum(B)) :
+//     return 0
+// pre_a = 0
+// pre_b = 0
+// sum_a = sum(A)
+// answer = 0
+// for i in range(len(A) - 1):
+//     pre_a = pre_a + A[i]
+//     pre_b = pre_b + B[i]
+//     if pre_a == pre_b and pre_a == sum_a - pre_a:
+//         answer += 1
+
+// return answer
+
+
+// function count(A,B){
+//     let sumA = A.reduce((a, b) => a + b, 0)
+//     let sumB = B.reduce((a, b) => a + b, 0)
+//     if (sumA != sumB){
+//         return 0
+//     }
+//     let pre_a = 0 
+//     let pre_b = 0
+//     let ans = 0
+//     for(let i = 0; i < A.length; i++){
+//         pre_a = pre_a + A[i]
+//         pre_b = pre_b + B[i]
+//         if (pre_a == pre_b && pre_a == sumA - pre_a){
+//             ans += 1
+//         }
+//     }
 // }
 
-// // 0(logN) = Divide and conquer / two pointer
 
-// // Space Complexity
+// function count(A){
+//     let sumA = A.reduce((a, b) => a + b, 0)
+//     currentSum = 0
+//     ans = 0
+//     for(val in A){
+//         console.log(parseInt(currentSum) + parseInt(val))
+//         if(currentSum + parseInt(val) <= 0){
+//             ans += 1
+//         }
+//         else{
+//             currentSum += val
+//         }
+//     }
+//     return ans
+// }
 
-// str = "adewale"
 
+
+// count([-1,-1,-1,1,1,1,1])
+
+
+
+function unknown1(arr, k){
+    max = 0
+    for( let i = 0; i < arr[0].length; i++){
+        x = 0
+        for( let j = 0; j < arr.length; j++){
+            if(arr[i][j] == 0) {
+                x += 1
+            }
+        }
+        if(x >= max){
+            max = x
+        }
+    }
+    return max
+}
+
+
+function unknown2(x,y){
+    while(x){
+        if(x.val == y){
+            return x
+        }
+        x = x.next
+    }
+}
+
+function unknown3 (y){
+    if(y == null){
+        return []
+    }
+    firstPlayer = y.firstPlayer
+    secondPlayer = y.secondPlayer
+
+    ans += unknown3(firstPlayer.value)
+    ans += unknown3(secondPlayer.value)
+    return ans
+}

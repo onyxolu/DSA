@@ -1,4 +1,4 @@
-from heapq import *
+# from heapq import *
 
 # Min Heap Solution
 # Time Complexity => 0(k*logN)
@@ -21,3 +21,10 @@ def KClosest(points, k):
 
 
 print(KClosest([[3,3],[5,-1],[-2,4]], 2))
+
+[]
+
+# k = 5
+# arr = [2,3,4,5,6,7,8,8,9,9,9,99]
+# for _ in range(k):
+#     print(i)

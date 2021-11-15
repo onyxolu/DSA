@@ -17,3 +17,7 @@ def Pow(x,n):
 
     res = helper(x,abs(n))
     return res if n >= 0 else 1/res
+
+
+print(pow(2.10000, 3))
+
