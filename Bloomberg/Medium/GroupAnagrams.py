@@ -18,3 +18,23 @@ class Solution:
             ans.append(dict[v])
             
         return ans
+
+
+# Hash
+    
+class Solution:
+    def groupAnagrams(self, strs):
+        gruops = {}
+        
+        for s in strs:
+            key = 0
+            
+            for char in s:
+                key += hash(char)
+            
+            if key in gruops:
+                gruops[key].append(s)
+            else:
+                gruops[key] = [s]
+        
+        return gruops.values()

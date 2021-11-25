@@ -6,6 +6,8 @@
 # Input: nums = [0,1,0,3,12]
 # Output: [1,3,12,0,0]
 
+# prevIdx shows the last time I saw a zero
+
 
 def moveZeros(nums):
     prevIdx = 0
