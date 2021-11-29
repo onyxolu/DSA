@@ -58,21 +58,57 @@
 
 
 
-import random
+# import random
 
 
-n = 3
-arr = [1,2,3]
+# n = 3
+# arr = [1,2,3]
 
 
 
-def calc(n):
-    for i in range(n-1, 0, -1):
-        j = random.randint(0, i+1)
-        print(i, j)
-        arr[i],arr[j] = arr[j],arr[i]
-    return arr
+# def calc(n):
+#     for i in range(n-1, 0, -1):
+#         j = random.randint(0, i+1)
+#         print(i, j)
+#         arr[i],arr[j] = arr[j],arr[i]
+#     return arr
         
 
 
-print(calc(n))
+# print(calc(n))
+
+
+
+def fact(n):
+    if (n == 0):
+        return 1
+    return n * fact(n-1)
+
+
+def fact2(n):
+    res = 1
+
+    while n > 0:
+        res *= n
+        n -= 1
+
+    return res
+
+
+def collatz(num, memo={1: 0}):
+    if num < 0:
+        return 
+
+    if num in memo:
+         return memo[num]
+
+    if num % 2:
+        res =  1 + collatz(3*num, memo)
+    else:
+        res = 1 + collatz(num//2, memo)
+
+    memo[num] = res
+    print(memo)
+    return res
+
+# collatz(15)
