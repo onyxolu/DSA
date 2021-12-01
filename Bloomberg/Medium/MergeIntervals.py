@@ -13,7 +13,7 @@ class Solution:
         for i in range(1, len(intervals)):
             interval = intervals[i]
             cur_start , cur_end = interval[0], interval[1]
-            if cur_start <= end:
+            if cur_start <= end: # merge
                 end = max(cur_end, end)
             else:
                 mergeIntervals.append([start, end])
