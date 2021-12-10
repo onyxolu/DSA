@@ -1,7 +1,7 @@
 
 from collections import Node
 
-# Optimal
+# Optimal - OPTIMALLLLLLLLLLLLLLLLLLLLLLLLLL
 
 class Solution:
     def lowestCommonAncestor(self, p: 'Node', q: 'Node') -> 'Node':
