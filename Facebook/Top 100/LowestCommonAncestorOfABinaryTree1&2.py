@@ -20,7 +20,7 @@ class Solution:
         dfs(root)
         return self.ans
         
-# BFS    
+# DFS - iterative    
         
 class Solution:
 

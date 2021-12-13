@@ -1,3 +1,4 @@
+# deleting at most one character from it
 
 # Two pointers
 

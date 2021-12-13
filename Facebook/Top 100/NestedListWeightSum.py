@@ -1,4 +1,6 @@
 
+# stack
+
 from collections import List
 
 """
@@ -49,8 +51,6 @@ class Solution:
         stack = [(i, 1) for i in nestedList]
         # [1,1]=>2, 1 => 1, [1,1] => 2
         res = 0
-        for val in stack:
-            i,d = val
         while stack:
             i, d = stack.pop()
             if i.isInteger(): # add int to result

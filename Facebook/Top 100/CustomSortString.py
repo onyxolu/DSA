@@ -15,12 +15,12 @@ class Solution(object):
     def customSortString(self, S, T):
         # count[char] will be the number of occurrences of
         # 'char' in T.
-        count = Counter(T)
+        count = Counter(T) # string
         ans = []
         print(count)
 
         # Write all characters that occur in S, in the order of S.
-        for c in S:
+        for c in S: # order
             ans.append(c * count[c])
             # Set count[c] = 0 to denote that we do not need
             # to write 'c' to our answer anymore.

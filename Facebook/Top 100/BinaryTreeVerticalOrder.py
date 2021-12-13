@@ -1,5 +1,6 @@
 
 #left to right
+# [3,0,0], [9,1,-1], [20,1, 1], [15, 2, 0], [7, 2, 2]
 
 # class TreeNode:
 #     def __init__(self, val=0, left=None, right=None):

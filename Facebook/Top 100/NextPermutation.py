@@ -38,7 +38,6 @@ class Solution:
                 nums[i], nums[n-i-1] = nums[n-i-1], nums[i]
             return
         # find elements in the range (nums[lastInc-1] to nums[lastInc])
-        mn = nums[lastInc]
         index = lastInc
         # handle special case SPecial case [1,2,3,5,4,2]
         for i in range(lastInc, n):

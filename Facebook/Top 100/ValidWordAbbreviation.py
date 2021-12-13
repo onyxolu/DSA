@@ -1,5 +1,5 @@
 
-
+# Two pointers
 class Solution:
     def validWordAbbreviation(self, word: str, abbr: str) -> bool:
         p1, p2 = 0, 0
@@ -10,7 +10,7 @@ class Solution:
                 p2 += 1
             else:
                 if abbr[p2].isdigit():
-                    if abbr[p2] == '0':
+                    if abbr[p2] == '0': # has leading zeros
                         return False
                     else:
                         d = abbr[p2]

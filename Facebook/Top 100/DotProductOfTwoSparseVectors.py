@@ -15,7 +15,7 @@ class SparseVector:
     def dotProduct(self, vec: 'SparseVector') -> int:
         ans = 0
         
-        for idx in self.s & vec.s:
+        for idx in self.s:
             ans += self.nums[idx] * vec.nums[idx]
         
         return ans

@@ -15,6 +15,9 @@ class Solution:
             summ += nums[i]
             mod = summ % k
             print(prefix, summ, mod)
+            # {0: -1} 23 5
+            # {0: -1, 5: 0} 25 1
+            # {0: -1, 5: 0, 1: 1} 29 5
             if mod in prefix:  # the same remainder 
                 if i - prefix[mod] > 1:
                     return True     

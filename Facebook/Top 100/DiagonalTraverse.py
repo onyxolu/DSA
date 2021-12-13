@@ -18,6 +18,7 @@ class Solution:
                 diagonals[r+c].append(mat[r][c])
                 
         res = diagonals[0]
+        # handle the direction of traverse
         for x in range(1, len(diagonals)):
             if x%2 == 1:
                 res.extend(diagonals[x])

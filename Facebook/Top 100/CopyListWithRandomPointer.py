@@ -17,6 +17,7 @@ class Solution:
         oldToCopy = {None: None}
         
         cur = head
+        # create a copy of all the nodes in the linkedlist and stor in hashmap
         while cur:
             copy = Node(cur.val)
             oldToCopy[cur] = copy

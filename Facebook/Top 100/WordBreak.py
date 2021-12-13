@@ -13,7 +13,9 @@ class Solution:
         # we find find the wordDict that matches first prefix (leet), then we move pointer and find worddict for the next prefix (code)
         # we return true when we reach the end of s
         # we need a cache
-        # so for example "catsandog", ["cats","dog","sand","and","cat"] index 7 for "og" is false so dp[7] = false, so when we try dp[7] again, we just return false immediately
+        # so for example "catsandog", ["cats","dog","sand","and","cat"] index 7
+        #  for "og" is false so dp[7] = false, so when we try dp[7] again, 
+        # we just return false immediately
         # base case is dp[8] = True for "leetcode", cos if we ever get to the last index then weve found the ans
         # we do bottom up approach from last index, e, de, ode etc and check if it matches any of the words
         # dp[8] = True, dp[7]=dp[6]=dp[5] = False, dp[4] = True, dp[3]=dp[2]=dp[1] = false, dp[0]= True

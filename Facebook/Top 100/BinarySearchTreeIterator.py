@@ -13,7 +13,7 @@ class TreeNode:
 class BSTIterator:
 
     def __init__(self, root: Optional[TreeNode]):
-        self.stack = []
+        self.stack = [] # store the leftmost nodes first
         cur = root
         while cur:
             self.stack.append(cur)
@@ -24,7 +24,7 @@ class BSTIterator:
         ans = self.stack[-1].val
         cur = self.stack.pop()
         
-        if cur.right:
+        if cur.right: # check if it has right so we can add leftmost nodes
             cur = cur.right
             while cur:
                 self.stack.append(cur)
