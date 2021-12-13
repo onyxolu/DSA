@@ -23,6 +23,7 @@ class Solution:
             oldToCopy[cur] = copy
             cur = cur.next
             
+        # set the copy's next and random pointers and return head
         cur = head
         while cur:
             copy = oldToCopy[cur]

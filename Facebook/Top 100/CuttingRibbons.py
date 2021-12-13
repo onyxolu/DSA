@@ -15,6 +15,9 @@ class Solution:
             # add number of ribons that can be made
             num_cuts = sum(ribbon//mid for ribbon in ribbons)
             print(num_cuts, mid)
+            # 3 5
+            # 2 7
+            # 2 6
             
             # keep searching for a possibly larger size that can make k 
             if num_cuts >= k:
