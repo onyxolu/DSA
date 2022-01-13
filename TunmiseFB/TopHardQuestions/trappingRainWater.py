@@ -1,4 +1,4 @@
-#Multiple soln link: https://www.geeksforgeeks.org/trapping-rain-water/
+# Multiple soln link: https://www.geeksforgeeks.org/trapping-rain-water/
 
 '''
 
@@ -17,32 +17,31 @@ Time Complexity - O(n2) - There are two nested loops traversing the array, So ti
 Space Complexity - O(1) - No extra space is required.
 '''
 
-def maxWater(arr, n) :
-     
+
+def maxWater(arr, n):
+
     # To store the maximum water
     # that can be stored
-    res = 0;
-     
+    res = 0
+
     # For every element of the array
-    for i in range(1, n - 1) :
-         
+    for i in range(1, n - 1):
+
         # Find the maximum element on its left
-        left = arr[i];
-        for j in range(i) :
-            left = max(left, arr[j]);
-         
+        left = arr[i]
+        for j in range(i):
+            left = max(left, arr[j])
+
         # Find the maximum element on its right
-        right = arr[i];
-         
-        for j in range(i + 1 , n) :
-            right = max(right, arr[j]);
-             
+        right = arr[i]
+
+        for j in range(i + 1, n):
+            right = max(right, arr[j])
+
         # Update the maximum water
-        res = res + (min(left, right) - arr[i]);
- 
-    return res;
+        res = res + (min(left, right) - arr[i])
 
-
+    return res
 
 
 '''
@@ -65,38 +64,38 @@ Space Complexity - O(n) - Two extra arrays are needed each of size n.
 
 '''
 
+
 def findWater(arr, n):
- 
+
     # left[i] contains height of tallest bar to the
     # left of i'th bar including itself
     left = [0]*n
- 
+
     # Right [i] contains height of tallest bar to
     # the right of ith bar including itself
     right = [0]*n
- 
+
     # Initialize result
     water = 0
- 
+
     # Fill left array
     left[0] = arr[0]
-    for i in range( 1, n):
+    for i in range(1, n):
         left[i] = max(left[i-1], arr[i])
- 
+
     # Fill right array
     right[n-1] = arr[n-1]
     for i in range(n-2, -1, -1):
-        right[i] = max(right[i + 1], arr[i]);
- 
+        right[i] = max(right[i + 1], arr[i])
+
     # Calculate the accumulated water element by element
     # consider the amount of water on i'th bar, the
     # amount of water accumulated on this particular
     # bar will be equal to min(left[i], right[i]) - arr[i] .
     for i in range(0, n):
         water += min(left[i], right[i]) - arr[i]
- 
-    return water
 
+    return water
 
 
 '''
@@ -113,43 +112,42 @@ Auxiliary Space - O(1) - As no extra space is required.
 
 
 def findWater(arr, n):
- 
+
     # initialize output
     result = 0
-      
+
     # maximum element on left and right
     left_max = 0
     right_max = 0
-      
+
     # indices to traverse the array
     lo = 0
     hi = n-1
-      
+
     while(lo <= hi):
-     
+
         if(arr[lo] < arr[hi]):
-         
+
             if(arr[lo] > left_max):
- 
+
                 # update max in left
                 left_max = arr[lo]
             else:
- 
+
                 # water on curr element = max - curr
                 result += left_max - arr[lo]
             lo += 1
-         
+
         else:
-         
+
             if(arr[hi] > right_max):
                 # update right maximum
                 right_max = arr[hi]
             else:
                 result += right_max - arr[hi]
             hi -= 1
-         
-    return result
 
+    return result
 
 
 '''
@@ -177,53 +175,52 @@ Auxiliary Space: O(n)
 
 '''
 
+
 def maxWater(height):
-     
+
     # Stores the indices of the bars
     stack = []
-     
+
     # size of the array
     n = len(height)
-     
+
     # Stores the final result
     ans = 0
-     
+
     # Loop through the each bar
     for i in range(n):
-         
+
         # Remove bars from the stack
         # until the condition holds
-        while(len(stack) != 0 and (height[stack[-1]] < height[i]) ):
-             
+        while(len(stack) != 0 and (height[stack[-1]] < height[i])):
+
             # store the height of the top
             # and pop it.
             pop_height = height[stack[-1]]
             stack.pop()
-             
+
             # If the stack does not have any
             # bars or the the popped bar
             # has no left boundary
             if(len(stack) == 0):
                 break
-             
+
             # Get the distance between the
             # left and right boundary of
             # popped bar
             distance = i - stack[-1] - 1
-             
+
             # Calculate the min. height
-            min_height = min(height[stack[-1]],height[i])-pop_height
-             
+            min_height = min(height[stack[-1]], height[i])-pop_height
+
             ans += distance * min_height
-         
+
         # If the stack is either empty or
         # height of the current bar is less than
         # or equal to the top bar of stack
         stack.append(i)
-     
+
     return ans
-
-
 
 
 '''
@@ -249,11 +246,10 @@ e.g
 '''
 
 
-
 class Solution:
     def trap(self, height):
         ans = 0
-        maxLeft, maxRight = 0,0
+        maxLeft, maxRight = 0, 0
         l = 0
         r = len(height) - 1
         while l < r:
@@ -269,5 +265,5 @@ class Solution:
                 else:
                     ans += maxRight - height[r]
                 r -= 1
-                    
+
         return ans

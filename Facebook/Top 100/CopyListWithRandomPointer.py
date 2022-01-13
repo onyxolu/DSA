@@ -15,7 +15,6 @@ class Solution:
         # Two Pass Algo
         
         oldToCopy = {None: None}
-        
         cur = head
         # create a copy of all the nodes in the linkedlist and stor in hashmap
         while cur:
