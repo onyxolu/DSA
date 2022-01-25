@@ -52,6 +52,7 @@ def flatten(self, head: 'Node') -> 'Node':
                 node.next.prev = node
                 # get the end node of the node.child list
                 prev = getTail(node.next)
+
                 if _next:
                     # ... <-> prev (end node) <-> _next (originally node.next) <-> ...
                     _next.prev = prev

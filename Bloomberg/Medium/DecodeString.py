@@ -14,13 +14,13 @@ def decodeString(self, s: str) -> str:
         else:
             substr = ""
             while stack[-1] != "[":
-                substr = stack.pop() + substr
-            stack.pop()
+                substr = stack.pop() + substr  # get the substring
+            stack.pop()  # pop the [
             num = ""
-            while stack and stack[-1].isdigit():
+            while stack and stack[-1].isdigit():  # get the number
                 num = stack.pop() + num
             stack.append(int(num) * substr)
-            
+
     return "".join(stack)
 
 
@@ -29,8 +29,8 @@ def decodeString(self, s: str) -> str:
 class Solution(object):
     def decodeString(self, s):
         s = list(s)[::-1]
-        
-        def helper(): 
+
+        def helper():
             ans = []
             k = 0
             while s:
@@ -47,6 +47,5 @@ class Solution(object):
                 elif char == ']':
                     return ''.join(ans)
             return ''.join(ans)
-        
+
         return helper()
-                
