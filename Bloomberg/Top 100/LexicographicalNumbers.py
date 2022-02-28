@@ -56,8 +56,6 @@ class Solution:
 
 
 
-
-
 # Basice idea: think about Trie. we append digits to the specific suffix until we reach the target number.
 
 class Solution:
