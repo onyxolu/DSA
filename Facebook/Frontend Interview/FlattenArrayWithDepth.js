@@ -1,5 +1,13 @@
 // https://bigfrontend.dev/problem/implement-Array-prototype.flat
 
+// flat([1,[2],[3,[4]]]) spec  , expects [1,2,3,[4]] but gets undefined
+
+// flat([1,[2],[3,[4]]], 1) spec  , expects [1,2,3,[4]] but gets undefined
+
+// flat([1,[2],[3,[4]], 2) spec  , expects [1,2,3,4] but gets undefined
+
+// flat([1,2,[3,4,[5,6,[7,8,[9,10]]]]], Infinity)  spec  , expects [1,2,3,4,5,6,7,8,9,10] but gets undefined
+
 function flat(arr, depth = 1) {
   // your imeplementation here
   function flatten(arr, ret, cur_depth) {
