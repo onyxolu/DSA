@@ -41,6 +41,7 @@ class LinkedList:
     cur = self.head
     while cur:
         nxt = cur.next
+        # redirect arrow
         cur.next = prev
         prev = cur
         cur = nxt

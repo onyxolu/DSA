@@ -240,4 +240,25 @@ class SnakeAndLadderService {
   startGame() {}
 }
 
-class Game {}
+class Game {
+    constructor() {
+
+    }
+
+    startGame() {
+        const noOfSnakes = 4;
+        const noOfLadders = 6;
+        const noOfPlayers = 2;
+        let snakes, ladders, players = [], [], [];
+        // for (let i = 0; i < noOfSnakes; i++){
+        //     snakes.push(new Snake(start, end))
+        // }
+        const snakeAndLadderService = new SnakeAndLadderService();
+        snakeAndLadderService.setPlayers(players);
+        snakeAndLadderService.setSnakes(snakes);
+        snakeAndLadderService.setLadders(ladders);
+
+        snakeAndLadderService.startGame();
+
+    }
+}
