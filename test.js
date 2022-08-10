@@ -47,6 +47,7 @@ const validateField = (schemaRules, data) => {
         switch (key) {
             case "type":
                 error = validateType(schemaRules[key], data);
+                console.log(error)
                 if (error) errors.push(error);
                 break;
             case "minMaxLength":
