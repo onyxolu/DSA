@@ -21,48 +21,52 @@
 
 
 class Transactions:
-    def __init__(self, raw_data):
+    def __init__(self, raw_data: str):
         self.transactions = self._parse(raw_data)
         
-    def _parse(self, raw_data):
+    def _parse(self, raw_data:str) -> list[str]:
         splitted_token = raw_data.split(",")
         stripped_token = [trans.strip() for trans in splitted_token if trans.strip()]
         return stripped_token
         
-    def validate_id(self, valid_ids):
+    def _isValid_id(self, id: str, valid_ids: list[str]):
         valid_ids_set = set(valid_ids)
-        valid_transactions= [t for t in self.transactions if t in valid_ids_set]
+        return (id in valid_ids_set)
+        
+    def _is_prefix(self, prefix_str:str, main_str: str):
+        return (main_str.startswith(prefix_str))
+        
+    def validate_id(self, valid_ids: list[str]) -> list[str]:
+        valid_transactions = [ trans for trans in self.transactions if self._isValid_id(trans, valid_ids)]
         return valid_transactions
         
-    def check_prefix(self, valid_ids):
+    def check_prefix(self, valid_ids: list[str]):
         prefixes = []
         for trans in self.transactions:
             for valid_id in valid_ids:
-                if valid_id.startswith(trans):
+                if self.is_prefix(trans, valid_id):
                     prefixes.append((trans, valid_id))
         return prefixes
         
-    def summarize(self, valid_ids):
-        valid_ids_set = set(valid_ids)
+    def summary(self, valid_ids: list[str]):
         trans_summary = []
         for trans in self.transactions:
             trans_map = {
                 "token": trans
             }
-            if trans in valid_ids_set:
+            if self._isValid_id(trans, valid_ids):
                 trans_map["status"] = "valid"
                 trans_summary.append(trans_map)
                 continue
-            
-            prefixes = [id for id in valid_ids if id.startswith(trans)]
+            prefixes = [id for id in valid_ids if self._is_prefix(trans, id)]
             if prefixes:
                 trans_map["status"] = "prefix"
                 trans_map["matches"] = prefixes
             else:
                 trans_map["status"] = "invalid"
-                
             trans_summary.append(trans_map)
         return trans_summary
+        
    
      
 # ---------- Step 1 tests: _parse ----------  

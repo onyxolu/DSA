@@ -94,15 +94,14 @@ class Transactions:
                 "raw_index": idx
             })
         return parsed_list
+    def _sort_transactions(self, transactions:list[dict]):
+        sorted_transactions = sorted( transactions, key=lambda r: ( r["iso_time"], r["seq"], r["raw_index"]))
+        return sorted_transactions
     
     def _get_sorted_transactions(self):
-        rows = self.transactions
-        sorted_rows = sorted(
-                        rows,
-                        key=lambda r: (r["iso_time"], r["seq"], r["raw_index"])
-                    )
-        return [f'{r["iso_time"]} {r["txn_id"]} {r["kind"]} {r["status"]}' for r in sorted_rows]
-
+        sorted_rows = self._sort_transactions(self.transactions)
+        template = "{iso_time} {txn_id} {kind} {status}"
+        return [template.format(**r) for r in sorted_rows]
 
     # ---- Step 3 helpers ----
     def _redact_card(self, card_mask: str) -> str:
@@ -122,33 +121,36 @@ class Transactions:
         }
         return table.get(kind.upper(), kind[:1].upper() or "?")
 
-    def _transform_record(self, r: dict) -> dict:
-        """Apply transforms without changing the original record."""
+    def _transform_record(self, r: dict, prefix_fail: str = "FAIL ") -> dict:
+        """Apply transforms and include a ready to use subject_line."""
+        kind_code = self._map_kind(r["kind"])
+        status_up = r["status"].upper()
+        card_redacted = self._redact_card(r["card_mask"])
+
+        line = f'{r["iso_time"]} {r["txn_id"]} {kind_code} {status_up}'
+        if status_up == "FAIL":
+            line = f"{prefix_fail}{line}"
+
         return {
             "seq": r["seq"],
             "iso_time": r["iso_time"],
             "txn_id": r["txn_id"],
-            "card_redacted": self._redact_card(r["card_mask"]),
-            "kind_code": self._map_kind(r["kind"]),
-            "status_up": r["status"].upper(),
+            "card_redacted": card_redacted,
+            "kind_code": kind_code,
+            "status_up": status_up,
             "raw_index": r["raw_index"],
+            "subject_line": line,
         }
 
     def format_subject_lines_transformed(self, prefix_fail: str = "FAIL ") -> list[str]:
         """
-        Sort first, then transform, then format.
-        Subject line format:
-          "[iso_time] [txn_id] [kind_code] [status_up]"
-        If status is FAIL, prefix the line with prefix_fail.
+        Sort, transform, then return subject-line strings.
         """
-        rows = sorted(self.transactions, key=lambda r: (r["iso_time"], r["seq"], r["raw_index"]))
+        rows = self._sort_transactions(self.transactions)
         out: list[str] = []
         for r in rows:
-            t = self._transform_record(r)
-            line = f'{t["iso_time"]} {t["txn_id"]} {t["kind_code"]} {t["status_up"]}'
-            if t["status_up"] == "FAIL":
-                line = prefix_fail + line
-            out.append(line)
+            t = self._transform_record(r, prefix_fail)
+            out.append(t["subject_line"])
         return out
 
 
