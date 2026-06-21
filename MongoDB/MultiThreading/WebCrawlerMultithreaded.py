@@ -1,16 +1,30 @@
+from concurrent.futures import ThreadPoolExecutor
+from threading import Lock
+import collections
+from typing import List
+
 # """
 # This is HtmlParser's API interface.
 # You should not implement it, or speculate about its implementation
 # """
-#class HtmlParser(object):
-#    def getUrls(self, url):
-#        """
-#        :type url: str
-#        :rtype List[str]
-#        """
+# class HtmlParser(object):
+#     def getUrls(self, url):
+#         """
+#         :type url: str
+#         :rtype List[str]
+#         """
 
-from concurrent.futures import ThreadPoolExecutor
-from threading import Lock
+# Clarify: does getUrls return cross-hostname links too? expected latency/scale?
+# I/O bound problem → multithreading helps, CPU-bound work wouldn't benefit (GIL)
+#
+# Key insight: separate slow I/O (getUrls) from fast shared-state access (queue, visited)
+# Only the shared-state section needs a lock — never lock around network calls
+#
+# Volunteer before being asked:
+#   - Unbounded threads risky → ThreadPoolExecutor caps concurrency (default 10, configurable)
+#   - Race condition risk → visited set + queue accessed by multiple threads → needs Lock
+#   - Real world: this is a simplified single-machine version of "Design a Distributed Web Crawler"
+#     (Bloom filter for dedup, Kafka for URL frontier, per-domain rate limiting, robots.txt)
 
 class Solution:
     def __init__(self):
@@ -18,42 +32,48 @@ class Solution:
         self.queue = collections.deque()
         self.visited = set()
 
-    def extractHostName(self, url):
-        return '.'.join(url.split('/')[2].split('.')[1:])    
+    def extractHostName(self, url: str) -> str:
+        return url.split('/')[2]                          # full hostname, no slicing needed
 
-    def downloadUrl(self, curr_url):
-        next_urls = self.htmlParser.getUrls(curr_url)
-        
-        # Use Lock to protect shared states.
-        with self.lock:
+    def downloadUrl(self, curr_url: str) -> None:
+        next_urls = self.htmlParser.getUrls(curr_url)     # slow network call — OUTSIDE lock
+                                                            # safe: doesn't touch shared state
+
+        with self.lock:                                    # shared state — must be exclusive
             for url in next_urls:
-                if url not in self.visited and self.curr_hostname == self.extractHostName(url):
+                if url not in self.visited and self.extractHostName(url) == self.curr_hostname:
                     self.queue.append(url)
-                    self.visited.add(url)  
+                    self.visited.add(url)
 
     def crawl(self, startUrl: str, htmlParser: 'HtmlParser') -> List[str]:
-        """
-        :type startUrl: str
-        :type htmlParser: HtmlParser
-        :rtype: List[str]
-        """
-        self.queue.append(startUrl)
+        self.htmlParser = htmlParser
         self.curr_hostname = self.extractHostName(startUrl)
         self.visited = {startUrl}
-        self.htmlParser = htmlParser
-        # Limit to 10 worker threads
-        with ThreadPoolExecutor(max_workers = 10) as executor:
+        self.queue.append(startUrl)
+
+        with ThreadPoolExecutor(max_workers=10) as executor:   # bounded pool, tunable
             while self.queue:
-
-                executor_list = list()
-                # Execute this batch of threads with threadpool
+                futures = []
                 while self.queue:
-                    executor_list.append(executor.submit(self.downloadUrl, self.queue.pop()))
+                    futures.append(executor.submit(self.downloadUrl, self.queue.pop()))
 
-                # Main thread waiting for the above threads to finish
-                for future in executor_list:
-                    future.result()
-        
-        return list(self.visited)    
-        
-        
+                for future in futures:
+                    future.result()                       # wait for this round before checking again
+
+        return list(self.visited)
+
+# Edge cases:
+#   startUrl has no outgoing links → returns [startUrl]
+#   all links same hostname → all get crawled
+#   circular links (A→B→A) → visited set prevents infinite loop
+
+# Complexity:
+#   time → O(U / min(threads, U)) roughly, bounded by slowest round, U = total unique URLs
+#   space → O(U) for visited set and queue
+
+# Follow-ups:
+#   Why 10 workers? → tunable; too few wastes concurrency, too many risks overwhelming target server
+#   Why pop() not popleft()? → DFS vs BFS order, doesn't matter since output order is unspecified
+#   What if getUrls() hangs forever? → add a timeout per future.result()
+#   System design version → distributed crawler: Bloom filter dedup, Kafka URL frontier,
+#                            per-domain rate limiting, robots.txt compliance, MongoDB for storage

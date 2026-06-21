@@ -1,115 +1,96 @@
-# Definition for singly-linked list.
-# class ListNode:
-#     def __init__(self, val=0, next=None):
-#         self.val = val
-#         self.next = next
+import heapq
+from typing import List, Optional
 
-# Heap Solution
+# Clarify: duplicates preserved? empty list valid? empty lists within list?
+# k = number of lists, n = total nodes across all lists
+#
+# Approach: Min Heap — O(n log k) time | O(k) space
+# Volunteer before being asked:
+#   - NodeWrapper needed → Python heapq can't compare ListNode directly
+#   - Only push head of each list initially → heap stays size k
+#   - As each node is popped, push its next → always k elements in heap
+#   - Divide and conquer alternative → O(n log k) time, O(log k) space (recursion stack)
+#   - Real world: merge phase of external merge sort, merging DB index pages
+
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
 
 class NodeWrapper:
     def __init__(self, node):
         self.node = node
 
-    # Helper function to compare two nodes, special function in python for less than
-    def __lt__(self, other):
+    def __lt__(self, other):                       # needed for heapq comparison
         return self.node.val < other.node.val
 
 class Solution:
     def mergeKLists(self, lists: List[Optional[ListNode]]) -> Optional[ListNode]:
-        if len(lists) == 0:
+        if not lists:
             return None
 
-        res = ListNode(0)
-        cur = res
+        res = cur = ListNode(0)                    # dummy head
         minHeap = []
 
         for lst in lists:
-            if lst is not None:
+            if lst:                                # skip empty lists
                 heapq.heappush(minHeap, NodeWrapper(lst))
 
         while minHeap:
-            node_wrapper = heapq.heappop(minHeap)
-            cur.next = node_wrapper.node
+            wrapper = heapq.heappop(minHeap)       # pop smallest
+            cur.next = wrapper.node
             cur = cur.next
 
-            if node_wrapper.node.next:
-                heapq.heappush(minHeap, NodeWrapper(node_wrapper.node.next))
+            if wrapper.node.next:                  # push next node from same list
+                heapq.heappush(minHeap, NodeWrapper(wrapper.node.next))
 
         return res.next
-    
 
-# Divide and Conquer Iteration
+# Edge cases:
+#   [] → None
+#   [[]] → None
+#   single list → returns it as is
+#   all equal values → all preserved in order
+
+# Complexity:
+#   time → O(n log k) — n pops each costing O(log k)
+#   space → O(k) — heap never exceeds k elements
+
+# vs Divide and Conquer:
+#   heap → O(k) space, simpler to implement
+#   divide and conquer → O(log k) space, better for memory-constrained environments
+
+# Connection:
+#   merge two sorted lists → building block of this problem
+#   this problem → building block of external merge sort
+
+
+# ─── Approach 2: Divide and Conquer — O(n log k) time | O(log k) space
+# Key insight: pair up lists and merge two at a time, halving the problem each round
+# log k rounds × O(n) per round = O(n log k)
+# Volunteer: better space than heap — O(log k) recursion stack vs O(k) heap
+# Real world: same as merge sort — natural fit for distributed merging
 class Solution:
-
     def mergeKLists(self, lists: List[Optional[ListNode]]) -> Optional[ListNode]:
-        if not lists or len(lists) == 0:
+        if not lists:
             return None
+        if len(lists) == 1:
+            return lists[0]
 
-        while len(lists) > 1:
-            mergedLists = []
-            for i in range(0, len(lists), 2):
-                l1 = lists[i]
-                l2 = lists[i + 1] if (i + 1) < len(lists) else None
-                mergedLists.append(self.mergeList(l1, l2))
-            lists = mergedLists
-        return lists[0]
+        mid = len(lists) // 2
+        left = self.mergeKLists(lists[:mid])       # recurse left half
+        right = self.mergeKLists(lists[mid:])      # recurse right half
+        return self.mergeTwoLists(left, right)     # merge the two halves
 
-    def mergeList(self, l1, l2):
-        dummy = ListNode()
-        tail = dummy
-
-        while l1 and l2:
-            if l1.val < l2.val:
-                tail.next = l1
-                l1 = l1.next
-            else:
-                tail.next = l2
-                l2 = l2.next
-            tail = tail.next
-
-        if l1:
-            tail.next = l1
-        if l2:
-            tail.next = l2
-
-        return dummy.next
-    
-
-# Divide and Conquer Recursion
-class Solution:
-    def mergeKLists(self, lists):
-        if not lists or len(lists) == 0:
-            return None
-        return self.divide(lists, 0, len(lists) - 1)
-
-    def divide(self, lists, l, r):
-        if l > r:
-            return None
-        if l == r:
-            return lists[l]
-
-        mid = l + (r - l) // 2
-        left = self.divide(lists, l, mid)
-        right = self.divide(lists, mid + 1, r)
-
-        return self.conquer(left, right)
-
-    def conquer(self, l1, l2):
-        dummy = ListNode(0)
-        curr = dummy
-
+    def mergeTwoLists(self, l1: Optional[ListNode], l2: Optional[ListNode]) -> Optional[ListNode]:
+        dummy = cur = ListNode(0)
         while l1 and l2:
             if l1.val <= l2.val:
-                curr.next = l1
+                cur.next = l1
                 l1 = l1.next
             else:
-                curr.next = l2
+                cur.next = l2
                 l2 = l2.next
-            curr = curr.next
-
-        if l1:
-            curr.next = l1
-        else:
-            curr.next = l2
-
+            cur = cur.next
+        cur.next = l1 or l2
         return dummy.next
